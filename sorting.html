@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorting Visualizer</title>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+  }
+  .container {
+    display: flex;
+    transform: scaleY(-1);
+    gap: 1px;
+  }
+  .bar {
+    width: 20px;
+    background-color: #3498db;
+    transition: height 0.2s;
+  }
+</style>
+</head>
+<body>
+<div class="container" id="bars"></div>
+<button onclick="startSorting()">Start Sorting</button>
+<script>
+  const barsContainer = document.getElementById('bars');
+  const numBars = 30; // Change this value to adjust the number of bars
+  const delay = 100; // Delay in milliseconds for visualization
+  
+  // Generate random numbers for bars
+  function generateRandomNumbers() {
+    const numbers = [];
+    for (let i = 0; i < numBars; i++) {
+      numbers.push(Math.floor(Math.random() * 100) + 1);
+    }
+    return numbers;
+  }
+  
+  // Create bars based on the numbers
+  function createBars(numbers) {
+    barsContainer.innerHTML = '';
+    numbers.forEach(num => {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = `${num * 3}px`;
+      barsContainer.appendChild(bar);
+    });
+  }
+  
+  // Bubble Sort algorithm
+  async function bubbleSort() {
+    const bars = barsContainer.getElementsByClassName('bar');
+    for (let i = 0; i < numBars - 1; i++) {
+      for (let j = 0; j < numBars - i - 1; j++) {
+        const bar1 = bars[j];
+        const bar2 = bars[j + 1];
+        bar1.style.backgroundColor = 'red';
+        bar2.style.backgroundColor = 'red';
+        await new Promise(resolve => setTimeout(resolve, delay));
+        const height1 = parseInt(bar1.style.height);
+        const height2 = parseInt(bar2.style.height);
+        if (height1 > height2) {
+          bar1.style.height = `${height2}px`;
+          bar2.style.height = `${height1}px`;
+        }
+        bar1.style.backgroundColor = '#3498db';
+        bar2.style.backgroundColor = '#3498db';
+      }
+    }
+  }
+  
+  // Initialize the visualizer
+  function initVisualizer() {
+    const randomNumbers = generateRandomNumbers();
+    createBars(randomNumbers);
+  }
+  
+  // Start sorting when button is clicked
+  function startSorting() {
+    bubbleSort();
+  }
+  
+  // Initialize the visualizer on page load
+  initVisualizer();
+</script>
+</body>
+</html>
